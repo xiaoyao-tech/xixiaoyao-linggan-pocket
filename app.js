@@ -19,7 +19,7 @@
   document.querySelectorAll('[data-icon]').forEach(el=>el.replaceWith(icon(el.dataset.icon)));
   const categories={写作:{name:'写作表达',icon:'pen',cls:''},工作:{name:'工作效率',icon:'work',cls:'work'},学习:{name:'学习成长',icon:'book',cls:'study'},生活:{name:'生活灵感',icon:'sun',cls:'life'}};
   const KEY='linggan-pocket-v1';
-  let custom=[], favorites=new Set(), category='全部', query='', selected=null, toastTimer;
+  let custom=[], favorites=new Set(), category='全部', query='', selected=null, toastTimer, detailOpener=null;
   try {
     const saved=JSON.parse(localStorage.getItem(KEY)||'{}');
     if(Array.isArray(saved.custom)) custom=saved.custom.filter(p=>p&&typeof p.id==='string'&&p.id.startsWith('custom-')&&typeof p.title==='string'&&p.title.trim()&&p.title.length<=40&&typeof p.content==='string'&&p.content.trim()&&p.content.length<=10000&&Object.hasOwn(categories,p.category)).slice(0,100).map(p=>({...p,description:p.content.replace(/\s+/g,' ').slice(0,50),tags:['我的提示词'],custom:true}));
@@ -27,16 +27,18 @@
     if(Array.isArray(saved.favorites)) favorites=new Set(saved.favorites.filter(id=>allIds.has(id)));
   } catch { $('#storage-notice').hidden=false; }
   function persist(){try{localStorage.setItem(KEY,JSON.stringify({custom,favorites:[...favorites]}));$('#storage-notice').hidden=true;return true;}catch{$('#storage-notice').hidden=false;return false;}}
-  function notify(message){clearTimeout(toastTimer);$('#toast').textContent=message;$('#toast').hidden=false;toastTimer=setTimeout(()=>$('#toast').hidden=true,2800);}
+  function notify(message){clearTimeout(toastTimer);const target=$('#detail-dialog').open?$('#detail-feedback'):$('#toast');target.textContent=message;target.hidden=false;if(target.id==='toast')toastTimer=setTimeout(()=>target.hidden=true,2800);}
+  function focusList(index=0){const buttons=[...document.querySelectorAll('[data-save-id]')];(buttons[Math.min(Math.max(index,0),buttons.length-1)]||document.querySelector('.filter.active')||$('#reset-filter')).focus();}
+  function activeCardIndex(){return [...document.querySelectorAll('.prompt-card')].indexOf(document.activeElement?.closest('.prompt-card'));}
   function all(){return [...window.POCKET_PROMPTS,...custom];}
   function tag(p){const c=categories[p.category];const el=document.createElement('span');el.className='category-tag '+c.cls;el.append(icon(c.icon),document.createTextNode(c.name));return el;}
   function makeButton(label,cls,handler){const el=document.createElement('button');el.type='button';el.className=cls;el.setAttribute('aria-label',label);el.addEventListener('click',handler);return el;}
   function syncFavoriteButtons(){document.querySelectorAll('[data-save-id]').forEach(b=>{const yes=favorites.has(b.dataset.saveId);b.setAttribute('aria-pressed',String(yes));b.setAttribute('aria-label',(yes?'取消收藏：':'收藏：')+(all().find(p=>p.id===b.dataset.saveId)?.title||''));});$('#favorite-count').textContent=favorites.size;if(selected){$('#detail-save').setAttribute('aria-pressed',String(favorites.has(selected.id)));$('#detail-save-label').textContent=favorites.has(selected.id)?'已收藏':'收藏提示词';}}
-  function toggleFavorite(p){const yes=!favorites.has(p.id);if(yes)favorites.add(p.id);else favorites.delete(p.id);const saved=persist();if(category==='收藏')render();else syncFavoriteButtons();notify(saved?(yes?'已收进口袋':'已取消收藏'):'本次已更新，但浏览器未能保存');}
-  function openPrompt(p){selected=p;$('#detail-title').textContent=p.title;$('#detail-description').textContent=p.description;$('#detail-content').textContent=p.content;const t=tag(p);t.id='detail-category';$('#detail-category').replaceWith(t);syncFavoriteButtons();$('#detail-dialog').showModal();$('#detail-content').scrollTop=0;}
+  function toggleFavorite(p){const focusIndex=activeCardIndex();const yes=!favorites.has(p.id);if(yes)favorites.add(p.id);else favorites.delete(p.id);const saved=persist();if(category==='收藏'){render();if(!$('#detail-dialog').open)focusList(focusIndex);}else syncFavoriteButtons();notify(saved?(yes?'已收进口袋':'已取消收藏'):'本次已更新，但浏览器未能保存');}
+  function openPrompt(p){detailOpener=document.activeElement;$('#detail-feedback').hidden=true;selected=p;$('#detail-title').textContent=p.title;$('#detail-description').textContent=p.description;$('#detail-content').textContent=p.content;const t=tag(p);t.id='detail-category';$('#detail-category').replaceWith(t);syncFavoriteButtons();$('#detail-dialog').showModal();$('#detail-content').scrollTop=0;}
   function card(p){const el=document.createElement('article');el.className='prompt-card';el.dataset.id=p.id;
     const top=document.createElement('div');top.className='card-top';top.append(tag(p));const save=makeButton('收藏：'+p.title,'icon-button',()=>toggleFavorite(p));save.dataset.saveId=p.id;save.append(icon('bookmark'));top.append(save);el.append(top);
-    if(p.custom){const del=makeButton('删除：'+p.title,'icon-button delete-custom',()=>{if(confirm('删除这条自建提示词？删除后无法恢复。')){custom=custom.filter(x=>x.id!==p.id);favorites.delete(p.id);const saved=persist();render();notify(saved?'已删除这条提示词':'本次已删除，但浏览器未能保存');}});del.append(icon('trash'));el.append(del);}
+    if(p.custom){const del=makeButton('删除：'+p.title,'icon-button delete-custom',()=>{if(confirm('删除这条自建提示词？删除后无法恢复。')){const focusIndex=activeCardIndex();custom=custom.filter(x=>x.id!==p.id);favorites.delete(p.id);const saved=persist();render();focusList(focusIndex);notify(saved?'已删除这条提示词':'本次已删除，但浏览器未能保存');}});del.append(icon('trash'));el.append(del);}
     const heading=document.createElement('h3');heading.className='card-title';const open=makeButton('查看：'+p.title,'',()=>openPrompt(p));open.textContent=p.title;heading.append(open);el.append(heading);
     const description=document.createElement('p');description.className='card-description';description.textContent=p.description;el.append(description);
     const bottom=document.createElement('div');bottom.className='card-bottom';const tags=document.createElement('div');tags.className='card-tags';for(const value of p.tags||[]){const item=document.createElement('span');item.textContent='# '+value;tags.append(item);}const more=makeButton('展开提示词：'+p.title,'card-open',()=>openPrompt(p));more.append(document.createTextNode('展开提示词'),icon('arrow-right'));bottom.append(tags,more);el.append(bottom);return el;
@@ -51,6 +53,7 @@
   $('#nav-favorites').addEventListener('click',()=>{category='收藏';query='';$('#search').value='';render();$('#library').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});
   document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.close).close()));
   document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d){const rect=d.getBoundingClientRect();if(e.clientX<rect.left||e.clientX>rect.right||e.clientY<rect.top||e.clientY>rect.bottom)d.close();}}));
+  $('#detail-dialog').addEventListener('close',()=>{if(detailOpener&&!detailOpener.isConnected)focusList();});
   $('#detail-save').addEventListener('click',()=>selected&&toggleFavorite(selected));
   $('#detail-copy').addEventListener('click',async()=>{
     if(!selected)return;const text=selected.content;let done=false;try{await navigator.clipboard.writeText(text);done=true;}catch{const field=document.createElement('textarea');field.value=text;field.style.cssText='position:fixed;left:-9999px;top:0';$('#detail-dialog').append(field);field.select();try{done=document.execCommand('copy');}catch{}field.remove();}
