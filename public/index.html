@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="把好用的提示词放进灵感口袋。精选写作、工作、学习与生活提示词，分类查找、一键复制、添加本机收藏。">
+  <meta name="theme-color" content="#7155e8">
+  <title>灵感口袋 · 把好用的提示词，留在手边</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%237155e8'/%3E%3Cpath d='M16 23h32v18L32 50 16 41z' fill='none' stroke='white' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M23 15h18v14H23z' fill='white'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./prompts.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#library">跳到提示词库</a>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="灵感口袋首页"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M7 12h18v12l-9 5-9-5z"/><path d="M11 4h10v13H11z"/></svg></span><span>灵感口袋<span class="brand-en">PROMPT POCKET</span></span></a>
+    <nav aria-label="主导航"><a href="#library">提示词库</a><a href="#how-it-works">使用方法</a><a href="#faq">常见问题</a></nav>
+    <button class="button button-small header-save" id="nav-favorites"><span data-icon="bookmark"></span>我的收藏</button>
+  </header>
+  <main>
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="mini-star" aria-hidden="true">✦</span> 给每一次灵感，一个好开头</p>
+        <h1 id="hero-title">好用的提示词，<br>都在<span class="accent">口袋里。</span></h1>
+        <p class="hero-description">写不顺的开头，理不清的思路，迟迟没开始的计划。<br class="desktop-break">挑一条提示词，让 AI 帮忙推进下一步。</p>
+        <div class="hero-actions"><a class="button button-primary" href="#library">打开灵感口袋 <span data-icon="arrow-right"></span></a><a class="text-link" href="#how-it-works">怎样用好提示词 <span aria-hidden="true">↗</span></a></div>
+        <div class="hero-notes"><span><span data-icon="check"></span>精选 <b id="prompt-total">12</b> 条</span><span><span data-icon="check"></span>无需注册</span><span><span data-icon="check"></span>复制即用</span></div>
+      </div>
+      <div class="hero-art"><img src="./assets/hero.png" alt="紫色的灵感口袋中收纳着几张提示词卡片" width="1024" height="1024" fetchpriority="high"><span class="art-note">A little prompt. A new possibility.</span></div>
+    </section>
+
+    <section id="library" class="library-section" aria-labelledby="library-title">
+      <div class="wrap">
+        <div class="section-heading"><div><p class="eyebrow">THE PROMPT COLLECTION</p><h2 id="library-title">今天，从哪一点灵感开始？</h2><p class="section-description">选一个场景，找到能马上用上的那一句。</p></div><button class="button button-outline" id="add-prompt"><span data-icon="plus"></span>添加提示词</button></div>
+        <div class="library-toolbar"><div class="filters" aria-label="提示词分类"><button class="filter active" data-category="全部" aria-pressed="true">全部</button><button class="filter" data-category="写作" aria-pressed="false">写作表达</button><button class="filter" data-category="工作" aria-pressed="false">工作效率</button><button class="filter" data-category="学习" aria-pressed="false">学习成长</button><button class="filter" data-category="生活" aria-pressed="false">生活灵感</button><button class="filter favorite-filter" data-category="收藏" aria-pressed="false"><span data-icon="bookmark"></span>我的收藏 <span id="favorite-count">0</span></button></div>
+          <label class="search"><span data-icon="search"></span><span class="sr-only">搜索提示词</span><input id="search" type="search" placeholder="搜索关键词" maxlength="100" autocomplete="off"></label>
+        </div>
+        <div class="collection-meta"><span id="result-count" role="status" aria-live="polite">12 条提示词</span><span>收藏与新增内容仅保存在当前浏览器</span></div>
+        <p id="storage-notice" class="storage-notice" hidden>当前浏览器暂时无法保存内容。本次仍可使用，关闭页面后新增内容可能丢失。</p>
+        <div class="prompt-grid" id="prompt-grid"></div>
+        <div class="empty-state" id="empty-state" hidden><span data-icon="search"></span><h3 id="empty-title">暂时没有匹配的提示词</h3><p id="empty-text">换个关键词，或试试其他分类。</p><button class="button button-outline" id="reset-filter">查看全部提示词</button></div>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="how-section wrap" aria-labelledby="how-title"><div class="how-heading"><p class="eyebrow">SMALL STEPS, GOOD IDEAS</p><h2 id="how-title">从“怎么问”，<br>到“开始做”。</h2><p>三步，把一个好问题交给 AI。</p></div><ol class="steps"><li><span class="step-number">01</span><h3>挑一个场景</h3><p>按实际任务选择提示词，点击卡片查看完整内容。</p></li><li><span class="step-number">02</span><h3>补上具体材料</h3><p>把方括号里的内容换成自己的背景、目标和原文。</p></li><li><span class="step-number">03</span><h3>带到常用的 AI</h3><p>复制后粘贴进 AI 对话，读完结果，再补充要求。</p></li></ol></section>
+
+    <section id="faq" class="faq-section wrap" aria-labelledby="faq-title"><div><p class="eyebrow">GOOD TO KNOW</p><h2 id="faq-title">几个小问题</h2><p class="section-description">简单开始，也知道内容去了哪里。</p></div><div class="faq-list"><details><summary>这些提示词可以在哪些 AI 工具里使用？</summary><p>可以复制到支持文字对话的 AI 工具中。不同模型的回答会有差异；联网检索、读取文件等任务，还需要所用工具具备对应能力。</p></details><details><summary>收藏和新增提示词保存在哪里？</summary><p>只保存在当前设备、当前浏览器的本地存储中，不上传服务器。更换设备、浏览器或网址不会自动同步；清理网站数据可能丢失收藏。重要内容请另外备份。</p></details><details><summary>点击复制后，AI 会自动开始工作吗？</summary><p>不会。这里负责整理和复制提示词，不直接调用大模型。复制完成后，需要粘贴到常用的 AI 对话里，并补齐方括号中的材料。</p></details><details><summary>这个页面需要付费吗？</summary><p>这个学习演示页面可以免费使用，不需要注册。所使用的 AI 工具是否收费，由对应工具的规则决定。</p></details></div></section>
+  </main>
+  <footer class="site-footer wrap"><a class="brand footer-brand" href="#"><span class="footer-star" aria-hidden="true">✦</span>灵感口袋</a><p>把好用的提示词，留在手边。</p><span>原创学习演示 · 无需登录</span></footer>
+
+  <dialog id="detail-dialog" class="modal detail-modal" aria-labelledby="detail-title"><div class="modal-heading"><span id="detail-category" class="category-tag"></span><button class="icon-button close-modal" aria-label="关闭提示词详情" data-close="detail-dialog"><span data-icon="x"></span></button></div><h2 id="detail-title"></h2><p id="detail-description" class="modal-description"></p><div class="prompt-instruction"><span data-icon="sparkles"></span>先替换方括号中的内容，再发给 AI。</div><div class="prompt-content" id="detail-content" tabindex="0"></div><div class="modal-actions"><button id="detail-save" class="button button-outline"><span data-icon="bookmark"></span><span id="detail-save-label">收藏提示词</span></button><button id="detail-copy" class="button button-primary"><span data-icon="copy"></span>复制完整提示词</button></div></dialog>
+  <dialog id="add-dialog" class="modal" aria-labelledby="add-title"><div class="modal-heading"><span class="eyebrow">MY LITTLE COLLECTION</span><button class="icon-button close-modal" aria-label="关闭添加窗口" data-close="add-dialog"><span data-icon="x"></span></button></div><h2 id="add-title">收下一条好用的提示词</h2><p class="modal-description">仅保存在当前浏览器，保存后自动加入收藏。</p><form id="add-form"><label>标题<input name="title" required maxlength="40" placeholder="给这条提示词起个名字"></label><label>分类<select name="category"><option value="写作">写作表达</option><option value="工作">工作效率</option><option value="学习">学习成长</option><option value="生活">生活灵感</option></select></label><label>完整提示词<textarea name="content" rows="7" required maxlength="10000" placeholder="写下任务、背景材料，以及希望获得的结果……"></textarea></label><p class="form-error" id="form-error" role="alert"></p><button class="button button-primary" type="submit"><span data-icon="plus"></span>保存到口袋</button></form></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

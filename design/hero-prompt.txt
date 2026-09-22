@@ -1,0 +1,9 @@
+Use case: stylized-concept
+Asset type: single polished square hero illustration for a Chinese AI prompt tool called Linggan Pocket, to be shown on the right side of a landing-page hero at approximately 420 pixels wide.
+Scene/backdrop: completely clean warm ivory studio background, solid color #fbfaf7 with only a delicate grounding shadow.
+Subject: one beautiful small translucent violet pocket / open document sleeve, with exactly three pristine white rounded rectangular prompt cards emerging from the top. Cards contain only minimal abstract short light-grey horizontal lines, no readable characters. One small four-point sparkle beside the pocket, in pale lemon yellow, suggesting collecting inspiration.
+Style/medium: sophisticated soft 3D product illustration, refined contemporary editorial design; simple geometry, subtle translucency, soft delicate satin surfaces, no plastic toy appearance.
+Composition/framing: square 1:1 canvas; centered subject viewed almost front-on with a slight top-down camera angle; the pocket is clearly open at its top and holds the three cards; graceful fanned arrangement of cards; ample clean negative space on all four sides, subject occupies about 65 percent of canvas width and height. Minimal uncluttered silhouette, legible when reduced to 420 pixels.
+Lighting/mood: soft clean studio illumination, gentle realistic highlights and soft ambient shadow, warm and inviting but elegant.
+Color palette: warm ivory #fbfaf7 background, vivid violet #7155e8 pocket, clean white cards, light grey short lines, only a small lemon-yellow accent.
+Constraints: generate exactly one finished asset, not a collage or variations. No words, no letters, no numbers, no logos, no watermark. No computer, phone, human, face, avatar or extra objects. No dark background.

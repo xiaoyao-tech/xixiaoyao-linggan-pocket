@@ -1,0 +1,8 @@
+{
+  "name": "linggan-pocket",
+  "version": "1.0.0",
+  "private": true,
+  "description": "灵感口袋：精选提示词与本机收藏",
+  "scripts": { "dev": "node server.mjs", "start": "node server.mjs" },
+  "engines": { "node": ">=18" }
+}
