@@ -30,7 +30,18 @@ npm run dev
 
 - Cloudflare Quick Tunnels：本地服务启动后运行 `cloudflared tunnel --url http://localhost:5173`。本地服务、隧道和网络需持续运行。
 - Netlify：发布目录为 `public`，无构建命令。可使用 Netlify Drop 上传整个 `public` 文件夹，或使用 CLI。
-- GitHub Pages：GitHub Actions 上传 `public` 目录；发布记录在 Actions 中查看。
+- GitHub Pages：源码保存在 `main` 分支，`public` 目录的网页文件单独发布到 `gh-pages` 分支根目录。在仓库 Settings → Pages 中选择从 `gh-pages` 分支的 `/ (root)` 发布；发布记录可在 Actions 中查看。
+
+更新网页后，在项目目录提交源码，再运行：
+
+```sh
+git push origin main
+git subtree split --prefix public -b pages-release
+git push origin pages-release:gh-pages
+git branch -D pages-release
+```
+
+这里的 `pages-release` 是用于提取网页文件的临时本地分支；发布分支只包含 `public` 中的静态文件。
 
 部署后请用未登录窗口检查页面、图片和交互，并在实际目标网络测试访问。
 
