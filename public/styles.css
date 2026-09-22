@@ -7,3 +7,5 @@
 
 .hero-art img{mask-image:radial-gradient(ellipse 68% 68% at 50% 50%,#000 54%,transparent 77%)}
 @media(max-width:760px){.card-description{font-size:14px;min-height:76px}.category-tag,.card-tags,.collection-meta{font-size:12px}.hero-notes{font-size:12px}.section-description{font-size:14px}.card-open{font-size:14px}.prompt-card{min-height:276px}}
+
+.dialog-feedback{font-size:14px;line-height:1.6;background:#eee8fd;color:#5f41b5;padding:10px 13px;border-radius:9px;margin:14px 0 0}
